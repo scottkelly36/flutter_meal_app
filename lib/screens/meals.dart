@@ -5,9 +5,9 @@ import 'package:flutter_meal_app/screens/recipe.dart';
 import 'package:flutter_meal_app/widgets/meal_item.dart';
 
 class MealsScreen extends StatelessWidget {
-  const MealsScreen({super.key, required this.title, required this.meals});
+  const MealsScreen({super.key, this.title, required this.meals});
 
-  final String title;
+  final String? title;
   final List<Meal> meals;
 
   void selectMeal(BuildContext context, Meal meal) {
@@ -31,7 +31,8 @@ class MealsScreen extends StatelessWidget {
               'There are no Meals for this category',
               style: Theme.of(context).textTheme.headlineLarge!.copyWith(
                     color: Theme.of(context).colorScheme.onBackground,
-                  ),
+                    
+                  ), textAlign: TextAlign.center,
             ),
             const SizedBox(
               height: 16,
@@ -46,9 +47,14 @@ class MealsScreen extends StatelessWidget {
         ),
       );
     }
+
+    if (title == null) {
+      return content;
+    }
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
+        title: Text(title!),
       ),
       body: content,
     );
