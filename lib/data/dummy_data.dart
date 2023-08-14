@@ -54,6 +54,11 @@ const availableCategories = [
     title: 'Summer',
     color: Colors.teal,
   ),
+  Category(
+    id: 'c11',
+    title: 'Empty',
+    color: Colors.brown,
+  ),
 ];
 
 const dummyMeals = [
