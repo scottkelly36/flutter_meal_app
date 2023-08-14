@@ -19,19 +19,20 @@ class MealsScreen extends StatelessWidget {
   void selectMeal(BuildContext context, Meal meal) {
     Navigator.of(context).push(MaterialPageRoute(
         builder: (ctx) => RecipeScreen(
-          meal: meal,
-          onToggleFavorite: onToggleFavorite,
-          )
-        )
-      );
+              meal: meal,
+              onToggleFavorite: onToggleFavorite,
+            )));
   }
 
   @override
   Widget build(BuildContext context) {
     Widget content = ListView.builder(
-      itemCount: meals.length,
-      itemBuilder: (ctx, index) => MealItem(meal: meals[index], onSelectMeal: (meal) {selectMeal(context, meal); } )
-    );
+        itemCount: meals.length,
+        itemBuilder: (ctx, index) => MealItem(
+            meal: meals[index],
+            onSelectMeal: (meal) {
+              selectMeal(context, meal);
+            }));
 
     if (meals.isEmpty) {
       content = Center(
@@ -39,17 +40,21 @@ class MealsScreen extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'There are no Meals for this category',
+              title != null
+                  ? 'There are no Meals for this category'
+                  : 'No Favorites',
               style: Theme.of(context).textTheme.headlineLarge!.copyWith(
                     color: Theme.of(context).colorScheme.onBackground,
-                    
-                  ), textAlign: TextAlign.center,
+                  ),
+              textAlign: TextAlign.center,
             ),
             const SizedBox(
               height: 16,
             ),
             Text(
-              'Try selecting another',
+              title != null ?
+              'Try selecting another' :
+              'Try Picking some favorite meals',
               style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                     color: Theme.of(context).colorScheme.onBackground,
                   ),
