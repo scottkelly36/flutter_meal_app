@@ -2,15 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_meal_app/models/meal.dart';
 
 class RecipeScreen extends StatelessWidget {
-  const RecipeScreen({super.key, required this.meal});
+  const RecipeScreen({
+    super.key,
+    required this.meal,
+    required this.onToggleFavorite,
+  });
 
   final Meal meal;
+  final void Function(Meal meal) onToggleFavorite;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           title: Text(meal.title),
+          actions: [
+            IconButton(
+              onPressed: () { 
+                onToggleFavorite(meal); 
+                }, 
+              icon: const Icon(Icons.star))
+          ]
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -44,23 +56,26 @@ class RecipeScreen extends StatelessWidget {
                     ),
               ),
               const SizedBox(height: 14),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: meal.steps.asMap().entries.map((entry) {
-                  final index = entry.key;
-                  final step = entry.value;
-        
-                  return Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                    child: Text(
-                      '${index + 1}. $step',
-                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                            color: Theme.of(context).colorScheme.onBackground,
-                          ), textAlign: TextAlign.left,
-                    ),
-                  );
-                }).toList(),
+              SizedBox(
+                width: double.infinity,
+                child: Column(              
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: meal.steps.asMap().entries.map((entry) {
+                    final index = entry.key;
+                    final step = entry.value;
+                      
+                    return Padding(
+                      padding:
+                          const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      child: Text(
+                        '${index + 1}. $step',
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                              color: Theme.of(context).colorScheme.onBackground,
+                            ), textAlign: TextAlign.left,
+                      ),
+                    );
+                  }).toList(),
+                ),
               )
             ],
           ),
