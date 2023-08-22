@@ -1,12 +1,17 @@
+//  packages
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+//  screens
 import 'package:flutter_meal_app/screens/categories.dart';
 import 'package:flutter_meal_app/screens/filters.dart';
 import 'package:flutter_meal_app/screens/meals.dart';
+//  models
 import 'package:flutter_meal_app/models/meal.dart';
+//  widgets
 import 'package:flutter_meal_app/widgets/main_drawer.dart';
+//  providers
 import 'package:flutter_meal_app/providers/meals_provider.dart';
+import 'package:flutter_meal_app/providers/favorites_provider.dart';
 
 class TabsScreen extends ConsumerStatefulWidget {
   const TabsScreen({super.key});
@@ -96,8 +101,9 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
     var activePageTitle = 'Categories';
 
     if (_selectedPageIndex == 1) {
+      final favoriteMeals = ref.watch(favoriteMealsProvider);
       activePage = MealsScreen(
-        meals: _favoriteMeals,
+        meals: favoriteMeals,
         onToggleFavorite: _toggleMealFavoriteStatus,
       );
       activePageTitle = 'Your Favorites';
