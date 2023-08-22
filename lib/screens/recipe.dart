@@ -1,29 +1,36 @@
+//packages
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+//  models
 import 'package:flutter_meal_app/models/meal.dart';
+//  providers
+import 'package:flutter_meal_app/providers/favorites_provider.dart';
 
-class RecipeScreen extends StatelessWidget {
+class RecipeScreen extends ConsumerWidget {
   const RecipeScreen({
     super.key,
     required this.meal,
-    required this.onToggleFavorite,
   });
 
   final Meal meal;
-  final void Function(Meal meal) onToggleFavorite;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(meal.title),
-          actions: [
-            IconButton(
-              onPressed: () { 
-                onToggleFavorite(meal); 
-                }, 
+        appBar: AppBar(title: Text(meal.title), actions: [
+          IconButton(
+              onPressed: () {
+                final wasAdded = ref
+                    .read(favoriteMealsProvider.notifier)
+                    .toggleMealFavoriteStatus(meal);
+                ScaffoldMessenger.of(context).clearSnackBars();
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text(wasAdded
+                        ? 'Recipe Added to Favorites'
+                        : 'Recipe Removed from Favorites')));
+              },
               icon: const Icon(Icons.star))
-          ]
-        ),
+        ]),
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -58,20 +65,21 @@ class RecipeScreen extends StatelessWidget {
               const SizedBox(height: 14),
               SizedBox(
                 width: double.infinity,
-                child: Column(              
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: meal.steps.asMap().entries.map((entry) {
                     final index = entry.key;
                     final step = entry.value;
-                      
+
                     return Padding(
-                      padding:
-                          const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 12),
                       child: Text(
                         '${index + 1}. $step',
                         style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                               color: Theme.of(context).colorScheme.onBackground,
-                            ), textAlign: TextAlign.left,
+                            ),
+                        textAlign: TextAlign.left,
                       ),
                     );
                   }).toList(),
