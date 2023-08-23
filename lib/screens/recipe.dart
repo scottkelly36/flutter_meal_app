@@ -23,17 +23,33 @@ class RecipeScreen extends ConsumerWidget {
     return Scaffold(
         appBar: AppBar(title: Text(meal.title), actions: [
           IconButton(
-              onPressed: () {
-                final wasAdded = ref
-                    .read(favoriteMealsProvider.notifier)
-                    .toggleMealFavoriteStatus(meal);
-                ScaffoldMessenger.of(context).clearSnackBars();
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text(wasAdded
-                        ? 'Recipe Added to Favorites'
-                        : 'Recipe Removed from Favorites')));
+            onPressed: () {
+              final wasAdded = ref
+                  .read(favoriteMealsProvider.notifier)
+                  .toggleMealFavoriteStatus(meal);
+              ScaffoldMessenger.of(context).clearSnackBars();
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text(wasAdded
+                      ? 'Recipe Added to Favorites'
+                      : 'Recipe Removed from Favorites')));
+            },
+            icon: AnimatedSwitcher(
+              duration: const Duration(microseconds: 300),
+              transitionBuilder: (child, animation) {
+                return RotationTransition(
+                  turns: Tween(
+                    begin: 0.5,
+                    end: 1.0,
+                  ).animate(animation),
+                  child: child,
+                ); 
               },
-              icon: Icon(isFavorite ? Icons.star : Icons.star_border_outlined))
+              child: Icon(
+                isFavorite ? Icons.star : Icons.star_border,
+                key: ValueKey(isFavorite),
+              ),
+            ),
+          ),
         ]),
         body: SingleChildScrollView(
           child: Column(
